@@ -1,6 +1,9 @@
 {
   "name": "renderer",
-  "version": "0.0.0",
+  "productName": "renderer",
+  "version": "1.0.0",
+  "description": "Entelect Challenge Replayer",
+  "main": "main.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -9,7 +12,12 @@
     "build:ssr": "ng run Renderer:server:dev",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "electron:start": "ng build --base-href ./ && electron ."
+  },
+  "author": {
+    "name": "Franche van den Berg",
+    "email": "franche.vandenberg@gmail.com"
   },
   "private": true,
   "dependencies": {
@@ -35,14 +43,16 @@
     "zone.js": "0.9.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.901.1",
+    "@angular-devkit/build-angular": "^0.803.23",
     "@angular/cli": "8.3.14",
     "@angular/compiler-cli": "8.2.12",
     "@angular/language-service": "8.2.12",
+    "@babel/compat-data": "~7.8.0",
     "@types/jasmine": "~3.4.4",
     "@types/jasminewd2": "~2.0.8",
     "@types/node": "~12.11.6",
     "codelyzer": "^5.2.0",
+    "electron": "8.2.2",
     "jasmine-core": "~3.5.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "^4.4.1",

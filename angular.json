@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Renderer": {
+    "renderer": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -60,18 +60,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "Renderer:build"
+            "browserTarget": "renderer:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "Renderer:build:production"
+              "browserTarget": "renderer:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "Renderer:build"
+            "browserTarget": "renderer:build"
           }
         },
         "test": {
@@ -121,7 +121,7 @@
         }
       }
     },
-    "Renderer-e2e": {
+    "renderer-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "architect": {
@@ -129,7 +129,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "Renderer:serve"
+            "devServerTarget": "renderer:serve"
           }
         },
         "lint": {
@@ -142,5 +142,5 @@
       }
     }
   },
-  "defaultProject": "Renderer"
+  "defaultProject": "renderer"
 }
