@@ -4,7 +4,7 @@ Hope everyone is keeping safe in these times.
 I would like to point everyone to a Visualizer that I build, that is deployed and running.
 This is a self contained Web APP, and no files are send to any endpoint. All within the browser.
 
-Here is the link: https://entelect-replay.raezor.co.za/ 12
+Here is the link: https://entelect-replay.raezor.co.za/
 
 Hope you enjoy it!
 
