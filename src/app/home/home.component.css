@@ -1,0 +1,41 @@
+.canvas {
+  border-width: 1px;
+  border-style: solid;
+}
+
+.canvas-element {
+  width: 100%;
+  padding: 8px 0px;
+}
+
+.canvas-element canvas {
+  border: solid;
+  border-width: thin;
+}
+
+.nav-link {
+    cursor: pointer;
+}
+
+.hidden {
+    display:none;
+}
+
+.card-header {
+  cursor: pointer;
+}
+
+.hideme {
+    opacity: 0;
+}
+
+.set-bottom {
+  position: absolute;
+  bottom: 20px;
+}
+
+video {
+  /* override other styles to make responsive */
+  width: 100% !important;
+  height: auto !important;
+}
