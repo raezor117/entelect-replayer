@@ -23,7 +23,7 @@
     </nav>
 
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 ml-3 mt-3" [hidden]="selectedMatch">
-      <h5>Last updated: 27/04/2020 @ 09h00</h5>
+      <h5>Last updated: 04/05/2020 @ 20h00</h5>
       <br />
       <h3>How it Works!</h3>
       <p>This tool allows you to replay a match played against 2 bots.</p>
@@ -58,6 +58,11 @@
       <p>- Added Links</p>
       <p>- Added Google Analytics</p>
       <p>- Updated Links</p>
+      <p>- Updater uploader to allow to load tournament zips</p>
+      <p>- Some small changes to look and feel (sizing and other cosmetics)</p>
+      <p>- Added ability to see what block a player is on as well.</p>
+      <p>- Improved next move highlight block</p>
+      <p>- Fixed issues with the slider, where other rounds blocks was showing when quickly moving the slider...</p>
     </main>
 
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" [ngClass]="{'hideme' : !selectedMatch}">
@@ -65,19 +70,13 @@
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <input #fileUploader type="file" (change)="fileChanged($event)" accept=".zip" class="hidden">
         <div>
-          <h2>{{ selectedMatch?.selectedRound }}</h2>
+          <h3>{{ selectedMatch?.selectedRound }}</h3>
         </div>
 
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
             <button type="button" class="btn btn-sm btn-outline-info" (click)="reset()">Reset</button>
           </div>
-          <!--<div class="btn-group mr-2">
-        <button type="button" class="btn btn-sm btn-outline-primary">Auto Play</button>
-      </div>-->
-          <!--<button type="button" class="btn btn-sm btn-outline-secondary">
-        Save Image
-      </button>-->
           <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeMatch()">
             Remove this match
           </button>
@@ -88,36 +87,45 @@
         <canvas class="center canvas" #canvasgame></canvas>
       </div>
 
-      <div class="d-flex justify-content-center flex-column align-items-center mb-4">
+      <div class="d-flex justify-content-center flex-column align-items-center mb-1">
         <div class="w-100">
           <input #round type="range"
                  class="custom-range" [value]="selectedMatch?.rounds.indexOf(selectedMatch?.selectedRound)" min="0"
                  [max]="selectedMatch?.rounds?.length - 1"
-                 step="1" (input)="setRoundIndex($event.target.value)"
+                 step="1" (input)="setRoundSliderIndex($event.target.value)"
+                 (mouseup)="setRound(selectedMatch.selectedRound)"
                  data-toggle="tooltip" data-placement="top" [title]="selectedMatch?.selectedRound">
         </div>
-        <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-toolbar mb-1 mb-md-0">
           <div class="btn-group mr-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary" (click)="setRoundIndex(0)">|< First</button>
+            <button type="button" class="btn btn-sm btn-secondary" (click)="setRoundIndex(0)"><svg class="bi bi-chevron-bar-left" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M11.854 3.646a.5.5 0 010 .708L8.207 8l3.647 3.646a.5.5 0 01-.708.708l-4-4a.5.5 0 010-.708l4-4a.5.5 0 01.708 0zM4.5 1a.5.5 0 00-.5.5v13a.5.5 0 001 0v-13a.5.5 0 00-.5-.5z" clip-rule="evenodd"/>
+              </svg> First</button>
           </div>
           <div class="btn-group mr-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary" (click)="setRoundIndex(selectedMatch?.rounds.indexOf(selectedMatch?.selectedRound) - 1)">< Prev</button>
+            <button type="button" class="btn btn-sm btn-secondary" (click)="setRoundIndex(selectedMatch?.rounds.indexOf(selectedMatch?.selectedRound) - 1)"><svg class="bi bi-chevron-left" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z" clip-rule="evenodd"/>
+            </svg> Prev</button>
           </div>
           <div class="btn-group mr-2">
-            <button type="button" class="btn btn-sm btn-outline-primary" (click)="changeRound()">{{ selectedMatch?.rounds.indexOf(selectedMatch?.selectedRound) + 1 }}</button>
+            <button type="button" class="btn btn-sm btn-primary" (click)="changeRound()">{{ selectedMatch?.rounds.indexOf(selectedMatch?.selectedRound) + 1 }}</button>
           </div>
           <div class="btn-group mr-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary" (click)="setRoundIndex(selectedMatch?.rounds.indexOf(selectedMatch?.selectedRound) + 1)">Next ></button>
+            <button type="button" class="btn btn-sm btn-secondary" (click)="setRoundIndex(selectedMatch?.rounds.indexOf(selectedMatch?.selectedRound) + 1)">Next <svg class="bi bi-chevron-right" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 01.708 0l6 6a.5.5 0 010 .708l-6 6a.5.5 0 01-.708-.708L10.293 8 4.646 2.354a.5.5 0 010-.708z" clip-rule="evenodd"/>
+            </svg></button>
           </div>
           <div class="btn-group mr-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary" (click)="setRoundIndex(selectedMatch?.rounds.length - 1)">Last >|</button>
+            <button type="button" class="btn btn-sm btn-secondary" (click)="setRoundIndex(selectedMatch?.rounds.length - 1)">Last <svg class="bi bi-chevron-bar-right" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M4.146 3.646a.5.5 0 000 .708L7.793 8l-3.647 3.646a.5.5 0 00.708.708l4-4a.5.5 0 000-.708l-4-4a.5.5 0 00-.708 0zM11.5 1a.5.5 0 01.5.5v13a.5.5 0 01-1 0v-13a.5.5 0 01.5-.5z" clip-rule="evenodd"/>
+            </svg></button>
           </div>
         </div>
+        <p class="small">(Click the button that displays the round number to quickly switch rounds)</p>
       </div>
-
       <hr />
       <div class="d-flex d-flex justify-content-between">
-        <h2>Round Details</h2>
+        <h3>Round Details</h3>
         <h6>Max Rounds: {{selectedMatch?.fileMap?.maxRounds}}</h6>
         <h5>Current Round: {{ selectedMatch?.fileMap?.currentRound }}</h5>
       </div>
@@ -125,16 +133,18 @@
         <div class="card" *ngFor="let player of selectedMatch?.players"
              [ngClass]="{'bg-primary': player.includes('A -'), 'bg-danger': player.includes('B -')}">
           <div class="card-header text-white" (click)="setPlayer(player)">
-            <h2 class="mb-0 float-left">
+            <h3 class="mb-0 float-left">
               {{ player }}
-            </h2>
+            </h3>
             <div class="m-1 float-right" [hidden]="player !== selectedMatch?.selectedPlayer">
+              {{ player === selectedMatch?.selectedPlayer ? ' (selected)' : '(click to select)' }}
               <svg class="bi bi-chevron-down" width="32px" height="32px" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd" />
               </svg>
             </div>
 
             <div class="m-1 float-right" [hidden]="player === selectedMatch?.selectedPlayer">
+              {{ player === selectedMatch?.selectedPlayer ? ' (selected)' : '(click to select)' }}
               <svg [ngClass]="{'show' : player === selectedMatch?.selectedPlayer}" class="bi bi-chevron-up" width="32px" height="32px" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 01.708 0l6 6a.5.5 0 01-.708.708L8 5.707l-5.646 5.647a.5.5 0 01-.708-.708l6-6z" clip-rule="evenodd" />
               </svg>
@@ -146,59 +156,59 @@
                 <div class="card">
                   <img src="assets/position.jpg" class="card-img-top">
                   <div class="card-body">
-                    <h5 class="card-title">Position</h5>
-                    <h1 class="center">{{ selectedMatch?.fileMap?.player?.position.x >= selectedMatch?.fileMap?.opponent?.position.x ? '1' : '2' }}</h1>
+                    <h6 class="card-title">Position</h6>
+                    <h2 class="center">{{ selectedMatch?.fileMap?.player?.position.x >= selectedMatch?.fileMap?.opponent?.position.x ? '1' : '2' }}</h2>
                     <p class="card-text">[x: {{ selectedMatch?.fileMap?.player?.position.x }}, y: {{ selectedMatch?.fileMap?.player?.position.y }}]</p>
                   </div>
                 </div>
                 <div class="card">
                   <img src="assets/speed.jpg" class="card-img-top" alt="...">
                   <div class="card-body">
-                    <h5 class="card-title">Speed</h5>
-                    <h1 class="center">{{ selectedMatch?.fileMap?.player?.speed }}</h1>
+                    <h6 class="card-title">Speed</h6>
+                    <h2 class="center">{{ selectedMatch?.fileMap?.player?.speed }}</h2>
                   </div>
                 </div>
                 <div class="card">
                   <img src="assets/lanes.jpg" class="card-img-top" alt="...">
                   <div class="card-body">
-                    <h5 class="card-title">Lane</h5>
-                    <h1 class="center">{{ selectedMatch?.fileMap?.player?.position.y }}</h1>
+                    <h6 class="card-title">Lane</h6>
+                    <h2 class="center">{{ selectedMatch?.fileMap?.player?.position.y }}</h2>
                   </div>
                 </div>
                 <div class="card">
                   <img src="assets/distance.jpg" class="card-img-top" alt="...">
                   <div class="card-body">
-                    <h5 class="card-title">Distance</h5>
-                    <h1 class="center">{{ selectedMatch?.fileMap?.player?.position.x }}</h1>
+                    <h6 class="card-title">Distance</h6>
+                    <h2 class="center">{{ selectedMatch?.fileMap?.player?.position.x }}</h2>
                   </div>
                 </div>
                 <div class="card">
                   <img src="assets/boosts.jpg" class="card-img-top" alt="...">
                   <div class="card-body">
-                    <h5 class="card-title">Boosts</h5>
-                    <h1 class="center">{{ selectedMatch?.fileMap?.player?.boostCounter }}</h1>
+                    <h6 class="card-title">Boosts</h6>
+                    <h2 class="center">{{ selectedMatch?.fileMap?.player?.boostCounter }}</h2>
                   </div>
                 </div>
                 <div class="card">
                   <img src="assets/boosting.jpg" class="card-img-top" alt="...">
                   <div class="card-body">
-                    <h5 class="card-title">Boosting</h5>
-                    <h1 class="center">{{ selectedMatch?.fileMap?.player?.boosting ? 'YES' : 'No' }}</h1>
+                    <h6 class="card-title">Boosting</h6>
+                    <h2 class="center">{{ selectedMatch?.fileMap?.player?.boosting ? 'YES' : 'No' }}</h2>
                   </div>
                 </div>
                 <div class="card">
                   <img src="assets/powerups.jpg" class="card-img-top" alt="...">
                   <div class="card-body">
-                    <h5 class="card-title">Powerups</h5>
-                    <h4 class="center">{{ selectedMatch?.fileMap?.player?.powerups }}</h4>
+                    <h6 class="card-title">Powerups</h6>
+                    <h5 class="center">{{ selectedMatch?.fileMap?.player?.powerups }}</h5>
                   </div>
                 </div>
               </div>
               <div class="card-group">
                 <div class="card text-white bg-dark">
                   <div class="card-body">
-                    <h1 class="card-title">Bot Command</h1>
-                    <h5 class="center" *ngFor="let c of selectedMatch?.command">{{ c }}</h5>
+                    <h3 class="card-title">Bot Command</h3>
+                    <h6 class="center" *ngFor="let c of selectedMatch?.command">{{ c }}</h6>
                   </div>
                 </div>
               </div>

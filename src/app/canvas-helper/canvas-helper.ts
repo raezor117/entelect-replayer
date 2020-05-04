@@ -50,7 +50,7 @@ export class CanvasHelper {
             nextFilereaderA.onload = function () {
               const nextRoundFileMapA = (JSON.parse(nextFilereaderA.result as string) as FileMap);
               // Add elements
-              self.nextRoundPlayerA(nextRoundFileMapA, match.fileMap.worldMap[0][0].position.x);
+              self.nextRoundPlayerA(nextRoundFileMapA, match.fileMap.worldMap[0][0].position.x, match.selectedPlayer === match.players[0] ? 5 : 3);
             };
             nextFilereaderA.readAsText(nextdataA);
           });
@@ -67,7 +67,7 @@ export class CanvasHelper {
             nextFilereaderB.onload = function () {
               const nextRoundFileMapB = (JSON.parse(nextFilereaderB.result as string) as FileMap);
               // Add elements
-              self.nextRoundPlayerB(nextRoundFileMapB, match.fileMap.worldMap[0][0].position.x);
+              self.nextRoundPlayerB(nextRoundFileMapB, match.fileMap.worldMap[0][0].position.x, match.selectedPlayer === match.players[1] ? 5 : 3);
             };
             nextFilereaderB.readAsText(nextdataB);
           });
@@ -127,55 +127,56 @@ export class CanvasHelper {
         }
         new CanvasBlockItem((x * self.tileSize), (y * self.tileSize), self.tileSize, self.tileSize, color, true, 2).setContext(self._ctx).draw();
 
-        new CanvasTextItem((x * self.tileSize), (y * self.tileSize), self.tileSize, self.tileSize, `[${fileMap.worldMap[y][x].position.x}, ${fileMap.worldMap[y][x].position.y}]`, 9, null, true).setContext(self._ctx).draw();
+        new CanvasTextItem((x * self.tileSize), (y * self.tileSize), self.tileSize, self.tileSize, `[${fileMap.worldMap[y][x].position.x}, ${fileMap.worldMap[y][x].position.y}]`, 10, null, true).setContext(self._ctx).draw();
 
+        let playerAdjustYText = 0;
         if (self.tileSize > 40) {
           if (fileMap.worldMap[y][x].occupiedByPlayerId) {
+            playerAdjustYText = 10;
             new CanvasTextItem((x * self.tileSize), (y * self.tileSize) + 12, self.tileSize, self.tileSize, `<PLAYER>`, 10, null, true).setContext(self._ctx).draw();
-          } else {
-            switch (fileMap.worldMap[y][x].surfaceObject) {
-              case 1:
-                new CanvasTextItem((x * self.tileSize), (y * self.tileSize) + 12, self.tileSize, self.tileSize, `<MUD>`, 10, null, true).setContext(self._ctx).draw();
-                break;
-              case 2:
-                new CanvasTextItem((x * self.tileSize), (y * self.tileSize) + 12, self.tileSize, self.tileSize, `<OIL_SPILL>`, 10, null, true).setContext(self._ctx).draw();
-                break;
-              case 3:
-                new CanvasTextItem((x * self.tileSize), (y * self.tileSize) + 12, self.tileSize, self.tileSize, `<OIL>`, 10, null, true).setContext(self._ctx).draw();
-                break;
-              case 4:
-                new CanvasTextItem((x * self.tileSize), (y * self.tileSize) + 12, self.tileSize, self.tileSize, `<FINISH>`, 10, null, true).setContext(self._ctx).draw();
-                break;
-              case 5:
-                new CanvasTextItem((x * self.tileSize), (y * self.tileSize) + 12, self.tileSize, self.tileSize, `<BOOST>`, 10, null, true).setContext(self._ctx).draw();
-                break;
-              default:
-                break;
-            }
+          } 
+          switch (fileMap.worldMap[y][x].surfaceObject) {
+            case 1:
+              new CanvasTextItem((x * self.tileSize), (y * self.tileSize) + 12 + playerAdjustYText, self.tileSize, self.tileSize, `<MUD>`, playerAdjustYText > 0 ? 9 : 10, null, true).setContext(self._ctx).draw();
+              break;
+            case 2:
+              new CanvasTextItem((x * self.tileSize), (y * self.tileSize) + 12 + playerAdjustYText, self.tileSize, self.tileSize, `<OIL SPILL>`, playerAdjustYText > 0 ? 9 : 10, null, true).setContext(self._ctx).draw();
+              break;
+            case 3:
+              new CanvasTextItem((x * self.tileSize), (y * self.tileSize) + 12 + playerAdjustYText, self.tileSize, self.tileSize, `<OIL>`, playerAdjustYText > 0 ? 9 : 10, null, true).setContext(self._ctx).draw();
+              break;
+            case 4:
+              new CanvasTextItem((x * self.tileSize), (y * self.tileSize) + 12 + playerAdjustYText, self.tileSize, self.tileSize, `<FINISH>`, playerAdjustYText > 0 ? 9 : 10, null, true).setContext(self._ctx).draw();
+              break;
+            case 5:
+              new CanvasTextItem((x * self.tileSize), (y * self.tileSize) + 12 + playerAdjustYText, self.tileSize, self.tileSize, `<BOOST>`, playerAdjustYText > 0 ? 9 : 10, null, true).setContext(self._ctx).draw();
+              break;
+            default:
+              break;
           }
         }
       }
     }
   }
 
-  public nextRoundPlayerA(fileMap: FileMap, startingMatchX: number) {
+  public nextRoundPlayerA(fileMap: FileMap, startingMatchX: number, size: number = 3) {
     let self = this;
     fileMap.worldMap.map(a => a.map(block => {
       switch (block.occupiedByPlayerId) {
         case 1:
-          new CanvasBlockBorderItem(((block.position.x - startingMatchX) * self.tileSize), ((block.position.y - 1) * self.tileSize), self.tileSize, self.tileSize, 3, "#007bff").setContext(self._ctx).draw();
+          new CanvasBlockBorderItem(((block.position.x - startingMatchX) * self.tileSize), ((block.position.y - 1) * self.tileSize), self.tileSize, self.tileSize, size, "#007bff").setContext(self._ctx).draw();
           break;
         default: break;
       }
     }));
   }
 
-  public nextRoundPlayerB(fileMap: FileMap, startingMatchX: number) {
+  public nextRoundPlayerB(fileMap: FileMap, startingMatchX: number, size: number = 3) {
     let self = this;
     fileMap.worldMap.map(a => a.map(block => {
       switch (block.occupiedByPlayerId) {
         case 2:
-          new CanvasBlockBorderItem(((block.position.x - startingMatchX) * self.tileSize), ((block.position.y - 1) * self.tileSize), self.tileSize, self.tileSize, 3, "#dc3545").setContext(self._ctx).draw();
+          new CanvasBlockBorderItem(((block.position.x - startingMatchX) * self.tileSize), ((block.position.y - 1) * self.tileSize), self.tileSize, self.tileSize, size, "#dc3545").setContext(self._ctx).draw();
           break;
         default: break;
       }

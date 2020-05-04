@@ -71,6 +71,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     self.setRound(self.selectedMatch.rounds[round]);
   }
 
+  setRoundSliderIndex(round: number): void {
+    const self = this;
+    if (round < 0) return;
+    if (round >= self.selectedMatch.rounds.length) return;
+    self.selectedMatch.setRound(`${self.selectedMatch.rounds[round]}`);
+    self._CH.reset();
+  }
+
   setRound(round: string): void {
     const self = this;
     self.selectedMatch.setRound(round);
@@ -112,7 +120,8 @@ export class HomeComponent implements OnInit, OnDestroy {
           .filter(filter => filter.includes("Round"))[0];
       }).filter(self.onlyUnique)
         .filter(filter => filter !== undefined);
-      match.rounds = rounds;
+
+      match.rounds = rounds.sort();
 
       const players = zipFile.map(file => {
         const playerA = file.filename.split("/")
@@ -125,14 +134,11 @@ export class HomeComponent implements OnInit, OnDestroy {
       }).filter(self.onlyUnique)
         .filter(filter => filter !== undefined)
         .filter(filter => !filter.includes(".csv"));
-      match.players = players;
+      match.players = players.sort();
+      console.log("players",players);
 
       self.engine.matches.push(match);
       self.selectFile(file.name);
-
-      
-
-      "endGameState.txt"
     });
   }
 
