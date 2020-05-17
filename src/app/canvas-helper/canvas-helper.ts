@@ -171,7 +171,7 @@ export class CanvasHelper {
               break;
           }
           if (fileMap.worldMap[y][x].isOccupiedByCyberTruck) {
-            new CanvasTextItem((x * self.tileSize), (y * self.tileSize) + 24 + playerAdjustYText, self.tileSize, self.tileSize, `<TRUCK>`, playerAdjustYText > 0 ? 9 : 10, null, true).setContext(self._ctx).draw();
+            new CanvasTextItem((x * self.tileSize), (y * self.tileSize) - 12, self.tileSize, self.tileSize, `<TRUCK>`, playerAdjustYText > 0 ? 9 : 10, null, true).setContext(self._ctx).draw();
           }
         }
       }
