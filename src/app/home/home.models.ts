@@ -69,5 +69,6 @@ export class WorldMapEntity {
   position: Position;
   surfaceObject: number;
   occupiedByPlayerId: number;
+  isOccupiedByCyberTruck: boolean;
 }
 /* */

@@ -110,11 +110,14 @@ export class CanvasHelper {
       for (let x = 0; x < fileMap.worldMap[y].length; x++) {
         let color = "#000";
         switch (fileMap.worldMap[y][x].surfaceObject) {
-          case 1: color = "#8B4513"; break;
+          case 1: color = "#BA4A00"; break;
           case 2: color = "#2F4F4F"; break;
-          case 3: color = "#DAA520"; break;
+          case 3: color = "#F4DA00"; break;
           case 4: color = "#FFFFFF"; break;
           case 5: color = "#00FF13"; break;
+          case 6: color = "#4D4D4D"; break;
+          case 7: color = "#A6FF00"; break;
+          case 8: color = "#00FFFF"; break;
           default:
             if (x < 5 && fileMap.currentRound !== 1) color = "#ABB2B9";
             else color = "#D5D8DC";
@@ -125,6 +128,10 @@ export class CanvasHelper {
           case 2: color = "#dc3545"; break;
           default: break;
         }
+        if (fileMap.worldMap[y][x].isOccupiedByCyberTruck) {
+          color = "#E0E0E0";
+        }
+
         new CanvasBlockItem((x * self.tileSize), (y * self.tileSize), self.tileSize, self.tileSize, color, true, 2).setContext(self._ctx).draw();
 
         new CanvasTextItem((x * self.tileSize), (y * self.tileSize), self.tileSize, self.tileSize, `[${fileMap.worldMap[y][x].position.x}, ${fileMap.worldMap[y][x].position.y}]`, 10, null, true).setContext(self._ctx).draw();
@@ -151,8 +158,20 @@ export class CanvasHelper {
             case 5:
               new CanvasTextItem((x * self.tileSize), (y * self.tileSize) + 12 + playerAdjustYText, self.tileSize, self.tileSize, `<BOOST>`, playerAdjustYText > 0 ? 9 : 10, null, true).setContext(self._ctx).draw();
               break;
+            case 6:
+              new CanvasTextItem((x * self.tileSize), (y * self.tileSize) + 12 + playerAdjustYText, self.tileSize, self.tileSize, `<WALL>`, playerAdjustYText > 0 ? 9 : 10, null, true).setContext(self._ctx).draw();
+              break;
+            case 7:
+              new CanvasTextItem((x * self.tileSize), (y * self.tileSize) + 12 + playerAdjustYText, self.tileSize, self.tileSize, `<LIZARD>`, playerAdjustYText > 0 ? 9 : 10, null, true).setContext(self._ctx).draw();
+              break;
+            case 8:
+              new CanvasTextItem((x * self.tileSize), (y * self.tileSize) + 12 + playerAdjustYText, self.tileSize, self.tileSize, `<TWEET>`, playerAdjustYText > 0 ? 9 : 10, null, true).setContext(self._ctx).draw();
+              break;
             default:
               break;
+          }
+          if (fileMap.worldMap[y][x].isOccupiedByCyberTruck) {
+            new CanvasTextItem((x * self.tileSize), (y * self.tileSize) + 24 + playerAdjustYText, self.tileSize, self.tileSize, `<TRUCK>`, playerAdjustYText > 0 ? 9 : 10, null, true).setContext(self._ctx).draw();
           }
         }
       }
