@@ -129,7 +129,7 @@ export class CanvasHelper {
           default: break;
         }
         if (fileMap.worldMap[y][x].isOccupiedByCyberTruck) {
-          color = "#E0E0E0";
+          color = "#B47CD9";
         }
 
         new CanvasBlockItem((x * self.tileSize), (y * self.tileSize), self.tileSize, self.tileSize, color, true, 2).setContext(self._ctx).draw();
